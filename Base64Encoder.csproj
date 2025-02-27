@@ -43,6 +43,9 @@
         <Reference Include="System.Xaml">
             <RequiredTargetFramework>4.0</RequiredTargetFramework>
         </Reference>
+        <Reference Include="TWComponents">
+          <HintPath>libs\TWComponents.dll</HintPath>
+        </Reference>
         <Reference Include="WindowsBase"/>
         <Reference Include="PresentationCore"/>
         <Reference Include="PresentationFramework"/>
@@ -90,6 +93,12 @@
       <Resource Include="assets\save24.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
+    </ItemGroup>
+    <ItemGroup>
+      <Resource Include="assets\clear24.png" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="libs\TWComponents.dll" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
 </Project>

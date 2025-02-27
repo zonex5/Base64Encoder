@@ -2,64 +2,72 @@
 using System.IO;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Base64Encoder
 {
     public partial class MainWindow
     {
-        private bool _textEncoded;
-
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            _textEncoded = !_textEncoded;
-            if (_textEncoded)
-            {
-                TbText.Text = ConvertToBase64(TbText.Text);
-                BtEncode.Content = "Base64";
-            }
-            else
-            {
-                var text = TbText.Text;
-                TbText.Text = ConvertFromBase64(text);
-                BtEncode.Content = "ASCII";
-            }
-        }
-
-        static string ConvertToBase64(string text)
+        private static string ConvertToBase64(string text)
         {
             if (string.IsNullOrWhiteSpace(text)) return string.Empty;
-            var bytes = Encoding.UTF8.GetBytes(text);
-            return Convert.ToBase64String(bytes);
-        }
-
-        static string ConvertFromBase64(string base64)
-        {
-            if (string.IsNullOrWhiteSpace(base64)) return string.Empty;
-            var bytes = Convert.FromBase64String(base64);
-            return Encoding.UTF8.GetString(bytes);
-        }
-
-        private void ButtonSave_OnClick(object sender, RoutedEventArgs e)
-        {
-            var dialog = new Microsoft.Win32.SaveFileDialog
+            try
             {
-                DefaultExt = ".txt",
-                Filter = "Text documents (.txt)|*.txt"
-            };
-            if (dialog.ShowDialog() == true)
+                return Convert.ToBase64String(Encoding.UTF8.GetBytes(text));
+            }
+            catch
             {
-                File.WriteAllText(dialog.FileName, TbText.Text);
+                return string.Empty;
             }
         }
 
-        private void ButtonCopy_OnClick(object sender, RoutedEventArgs e)
+        private static string ConvertFromBase64(string base64)
         {
-            Clipboard.SetText(TbText.Text);
+            if (string.IsNullOrWhiteSpace(base64)) return string.Empty;
+            try
+            {
+                return Encoding.UTF8.GetString(Convert.FromBase64String(base64));
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private void ButtonCopyAscii_OnClick(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(TbTextAscii.Text);
+        }
+
+        private void ButtonCopyBase64_OnClick(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(TbTextBase64.Text);
+        }
+
+        private void TbText_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (TbTextAscii.IsFocused)
+            {
+                TbTextBase64.Text = ConvertToBase64(TbTextAscii.Text);
+            }
+            else if (TbTextBase64.IsFocused)
+            {
+                TbTextAscii.Text = ConvertFromBase64(TbTextBase64.Text);
+            }
+        }
+
+        private void CaptionBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ButtonState == MouseButtonState.Pressed)
+            {
+                DragMove();
+            }
         }
     }
 }

@@ -4,15 +4,39 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Base64Encoder"
+        xmlns:w="clr-namespace:TwComponents.Components.BaseWindow;assembly=TWComponents"
+        xmlns:windowControls="clr-namespace:TwComponents.Components.WindowControls;assembly=TWComponents"
         mc:Ignorable="d" Height="320" Width="550"
-        ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="SingleBorderWindow"
+        AllowsTransparency="False"
         Title="Base64 Encoder">
+    <!--<WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0" CornerRadius="0" />
+    </WindowChrome.WindowChrome>-->
     <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border CornerRadius="5"
+                                Background="White"
+                                BorderBrush="LightGray"
+                                BorderThickness="1"
+                                Padding="5">
+                            <ScrollViewer x:Name="PART_ContentHost" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style TargetType="Button">
             <Setter Property="Background" Value="WhiteSmoke" />
             <Setter Property="BorderBrush" Value="Transparent" />
             <Setter Property="Foreground" Value="DimGray" />
-            <Setter Property="Padding" Value="7 3" />
+            <Setter Property="Padding" Value="10 2" />
+            <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -21,7 +45,7 @@
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 Padding="{TemplateBinding Padding}"
-                                CornerRadius="4">
+                                CornerRadius="3">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
                         <ControlTemplate.Triggers>
@@ -41,16 +65,41 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <DockPanel Grid.Row="0" Margin="15 5" LastChildFill="False" VerticalAlignment="Bottom">
-            <Button DockPanel.Dock="Left" Background="Transparent" Padding="3" ToolTip="Save to File" Click="ButtonSave_OnClick">
-                <Image Opacity="0.6" Source="assets/save24.png" Width="16" Height="16" />
-            </Button>
-            <Button DockPanel.Dock="Left" Background="Transparent" Padding="3" ToolTip="Copy to Clipboard" Click="ButtonCopy_OnClick">
-                <Image Opacity="0.5" Source="assets/copy24.png" Width="16" Height="16" />
-            </Button>
-            <Button x:Name="BtEncode" Click="ButtonBase_OnClick" Content="ASCII" DockPanel.Dock="Right" />
+        <!--<Border Grid.Row="0" Background="WhiteSmoke" MouseLeftButtonDown="CaptionBar_MouseLeftButtonDown">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Base64 Encoder"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontWeight="Bold"
+                           Foreground="DimGray" />
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
+                    <Button Foreground="DimGray" Content="&#xEE57;"
+                            ToolTip="Settings" Margin="0 -2 5 0" />
+                    <windowControls:WindowControls x:Name="Controls" Foreground="Gray" Margin="0 0 -1 0" />
+                </StackPanel>
+            </Grid>
+        </Border>-->
+        <DockPanel Grid.Row="0" Margin="15 10 0 5" LastChildFill="False" VerticalAlignment="Center">
+            <Button Content="ASCII" ToolTip="Copy ASCII value to clipboard" Cursor="Hand" DockPanel.Dock="Left" Click="ButtonCopyAscii_OnClick" />
         </DockPanel>
-        <TextBox x:Name="TbText" Grid.Row="1" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" Margin="15 0 15 15" />
+        <TextBox Grid.Row="1" x:Name="TbTextAscii"
+                 TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                 AcceptsReturn="True" Margin="15 0 15 15"
+                 TextChanged="TbText_OnTextChanged" />
+
+        <DockPanel Grid.Row="2" Margin="15 5" LastChildFill="False" VerticalAlignment="Bottom">
+            <Button Content="Base64" ToolTip="Copy Base64 value to clipboard" Cursor="Hand" DockPanel.Dock="Left" Click="ButtonCopyBase64_OnClick" />
+        </DockPanel>
+        <TextBox Grid.Row="3" x:Name="TbTextBase64"
+                 TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                 AcceptsReturn="True" Margin="15 0 15 15"
+                 TextChanged="TbText_OnTextChanged" />
     </Grid>
-</Window> 
+</Window>

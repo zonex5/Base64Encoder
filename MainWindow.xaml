@@ -1,22 +1,58 @@
-﻿<Window x:Class="Base64Encoder.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Base64Encoder"
-        xmlns:w="clr-namespace:TwComponents.Components.BaseWindow;assembly=TWComponents"
-        xmlns:windowControls="clr-namespace:TwComponents.Components.WindowControls;assembly=TWComponents"
-        mc:Ignorable="d" Height="320" Width="550"
-        ResizeMode="CanMinimize"
-        WindowStartupLocation="CenterScreen"
-        WindowStyle="SingleBorderWindow"
-        AllowsTransparency="False"
-        Title="Base64 Encoder">
-    <!--<WindowChrome.WindowChrome>
+﻿<w:TwWindow x:Class="Base64Encoder.MainWindow"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            xmlns:local="clr-namespace:Base64Encoder"
+            xmlns:w="clr-namespace:TwComponents.Components.BaseWindow;assembly=TWComponents"
+            xmlns:windowControls="clr-namespace:TwComponents.Components.WindowControls;assembly=TWComponents"
+            mc:Ignorable="d" Height="320" Width="550"
+            ResizeMode="CanResizeWithGrip"
+            WindowStartupLocation="CenterScreen"
+            WindowStyle="None"
+            AllowsTransparency="False"
+            Title="Base64 Encoder" Loaded="MainWindow_OnLoaded">
+    <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" CornerRadius="0" />
-    </WindowChrome.WindowChrome>-->
+    </WindowChrome.WindowChrome>
     <Window.Resources>
+
+        <!--tool button-->
+        <Style x:Key="ToolButton" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="True" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#C5C5C5" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="DarkGray" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+            <Setter Property="Width" Value="28" />
+            <Setter Property="Height" Value="28" />
+            <Setter Property="Padding" Value="4" />
+            <Setter Property="Margin" Value="0 0 5 0 " />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <!-- text box-->
         <Style TargetType="TextBox">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Foreground" Value="DimGray" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
@@ -31,6 +67,8 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!--button-->
         <Style TargetType="Button">
             <Setter Property="Background" Value="WhiteSmoke" />
             <Setter Property="BorderBrush" Value="Transparent" />
@@ -64,42 +102,43 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <!--<Border Grid.Row="0" Background="WhiteSmoke" MouseLeftButtonDown="CaptionBar_MouseLeftButtonDown">
+        <Border Grid.Row="0" Background="WhiteSmoke" MouseLeftButtonDown="CaptionBar_MouseLeftButtonDown">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="Base64 Encoder"
-                           HorizontalAlignment="Center"
+                <TextBlock Grid.Column="0" Text="Base64 Encoder" FontSize="12"
+                           HorizontalAlignment="Left"
                            VerticalAlignment="Center"
-                           FontWeight="Bold"
-                           Foreground="DimGray" />
+                           FontWeight="Regular"
+                           Foreground="DimGray" Margin="10 0" />
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
-                    <Button Foreground="DimGray" Content="&#xEE57;"
-                            ToolTip="Settings" Margin="0 -2 5 0" />
+                    <Button Style="{StaticResource ToolButton}" Foreground="DimGray" Content="&#xE75C;"
+                            ToolTip="Clear all text" Margin="0 -2 5 0" Click="ButtonClear_OnClick" />
                     <windowControls:WindowControls x:Name="Controls" Foreground="Gray" Margin="0 0 -1 0" />
                 </StackPanel>
             </Grid>
-        </Border>-->
-        <DockPanel Grid.Row="0" Margin="15 10 0 5" LastChildFill="False" VerticalAlignment="Center">
+        </Border>
+        <DockPanel Grid.Row="1" Margin="15 10 0 5" LastChildFill="False" VerticalAlignment="Center">
             <Button Content="ASCII" ToolTip="Copy ASCII value to clipboard" Cursor="Hand" DockPanel.Dock="Left" Click="ButtonCopyAscii_OnClick" />
         </DockPanel>
-        <TextBox Grid.Row="1" x:Name="TbTextAscii"
+        <TextBox Grid.Row="2" x:Name="TbTextAscii"
                  TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
                  AcceptsReturn="True" Margin="15 0 15 15"
                  TextChanged="TbText_OnTextChanged" />
 
-        <DockPanel Grid.Row="2" Margin="15 5" LastChildFill="False" VerticalAlignment="Bottom">
+        <DockPanel Grid.Row="3" Margin="15 5" LastChildFill="False" VerticalAlignment="Bottom">
             <Button Content="Base64" ToolTip="Copy Base64 value to clipboard" Cursor="Hand" DockPanel.Dock="Left" Click="ButtonCopyBase64_OnClick" />
         </DockPanel>
-        <TextBox Grid.Row="3" x:Name="TbTextBase64"
+        <TextBox x:Name="TbTextBase64" Grid.Row="4"
                  TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
                  AcceptsReturn="True" Margin="15 0 15 15"
                  TextChanged="TbText_OnTextChanged" />
     </Grid>
-</Window>
+</w:TwWindow>

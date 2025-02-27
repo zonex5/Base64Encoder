@@ -4,6 +4,8 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
+using System.Windows.Media;
 
 namespace Base64Encoder
 {
@@ -12,6 +14,10 @@ namespace Base64Encoder
         public MainWindow()
         {
             InitializeComponent();
+            
+            Controls.OnCloseClick += (a, args) => Close();
+            Controls.OnMaximizeClick += (a, args) => WindowState = (WindowState == WindowState.Normal) ? WindowState.Maximized : WindowState.Normal;
+            Controls.OnMinimizeClick += (a, args) => WindowState = WindowState.Minimized;
         }
 
         private static string ConvertToBase64(string text)
@@ -68,6 +74,18 @@ namespace Base64Encoder
             {
                 DragMove();
             }
+        }
+
+        private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            RemoveWindowRoundedCorners();
+            RenderOptions.ProcessRenderMode = RenderMode.Default;
+        }
+
+        private void ButtonClear_OnClick(object sender, RoutedEventArgs e)
+        {
+            TbTextAscii.Clear();
+            TbTextBase64.Clear();
         }
     }
 }
